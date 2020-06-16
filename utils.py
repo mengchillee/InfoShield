@@ -48,14 +48,20 @@ def read_data(path):
 	lsh_label = df['LSH label'].unique()
 	data = defaultdict(dict)
 
+	voc = set()
 	for label in progressbar.progressbar(lsh_label):
 		for id, text in df[df['LSH label'] == label][['id', 'text']].values:
 			try:
 				text = str_prep(text)
+				for t in text:
+					voc.add(t)
 			except:
 				continue
 			if len(text) != 0:
 				data[label][id] = text
+
+	gvc = ceil(np.log2(len(voc)))
+	set_global_voc_cost(gvc)
 	return data
 
 def output_word(temp, cond, word_path):

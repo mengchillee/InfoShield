@@ -98,10 +98,6 @@ def slot_identify(pads, gid_arr, gid, template):
 	return template
 
 def AutoDup_MDL(pads, output_path):
-	### Set gloabel vocabulary cost
-	gvc = ceil(np.log2(len(np.unique(np.concatenate(list(pads.values()))))))
-	set_global_voc_cost(gvc)
-
 	init_cost = prev_total_cost = np.sum([sequence_cost(s) for _, s in pads.items()]) + len(pads)
 	gid_arr = np.array([l for l, _ in pads.items()])
 
@@ -192,14 +188,14 @@ def run_autodupfine(filename, id_str='id', text_str='text'):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print('Please provide a filename!')
+	if len(sys.argv) < 2:
+		print('Please provide a filename!')
 
-    if len(sys.argv) == 4:
-        id_str = sys.argv[2]
-        text_str = sys.argv[3]
-    else:
-        id_str = 'id'
-        text_str = 'text'
+	if len(sys.argv) == 4:
+		id_str = sys.argv[2]
+		text_str = sys.argv[3]
+	else:
+		id_str = 'id'
+		text_str = 'text'
 
-    run_autodupfine(sys.argv[1], id_str, text_str)
+	run_autodupfine(sys.argv[1], id_str, text_str)

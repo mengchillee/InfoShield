@@ -118,7 +118,6 @@ class POAGraph(object):
 		self.nodedict = {}
 		self.nodeidlist = []   # allows a (partial) order to be imposed on the nodes
 
-		self.vocabulary = set()
 		self.startslot = False
 
 		self.__needsort = False
@@ -128,23 +127,16 @@ class POAGraph(object):
 
 		if seq is not None:
 			self.addUnmatchedSeq(seq, label)
-			self.check_vocabulary()
-
-	def check_vocabulary(self):
-		ni = self.nodeiterator()
-		for node in ni():
-			self.vocabulary.add(node.base)
 
 	def encoding_cost(self):
 		v = self._nnodes
-		u = self.vocabulary
 		s = np.sum([1 if node.slot else 0 for node in self.nodedict.values()])
 
 		### Node information
 		bits = log_star(v) + v * word_cost()
 
 		### Slot Position
-		bits += log_star(s) + s * ceil(np.log2(v))
+		bits += (s + 1) * ceil(np.log2(v))
 
 		return bits
 
@@ -196,8 +188,6 @@ class POAGraph(object):
 		return self._nedges
 
 	def _simplified_graph_rep(self):
-		## TODO: The need for this suggests that the way the graph is currently represented
-		## isn't really right and needs some rethinking.
 
 		node_to_pn = {}
 		pn_to_nodes = {}
@@ -232,19 +222,6 @@ class POAGraph(object):
 		"""Sorts node list so that all incoming edges come from nodes earlier in the list."""
 		sortedlist = []
 		completed = set([])
-
-		##
-		## The topological sort of this graph is complicated by the alignedTo edges;
-		## we want to nodes connected by such edges to remain near each other in the
-		## topological sort.
-		##
-		## Here we'll create a simple version of the graph that merges nodes that
-		## are alignedTo each other, performs the sort, and then decomposes the
-		## 'pseudonodes'.
-		##
-		## The need for this suggests that the way the graph is currently represented
-		## isn't quite right and needs some rethinking.
-		##
 
 		pseudonodes = self._simplified_graph_rep()
 
@@ -318,8 +295,6 @@ class POAGraph(object):
 		headID = None
 		tailID = None
 
-		# head, tail of sequence may be unaligned; just add those into the
-		# graph directly
 		validstringidxs = [si for si in stringidxs if si is not None]
 		startSeqIdx, endSeqIdx = validstringidxs[0], validstringidxs[-1]
 		if startSeqIdx > 0:
@@ -327,17 +302,6 @@ class POAGraph(object):
 		if endSeqIdx < len(newseq):
 			tailID, __ = self.addUnmatchedSeq(newseq[endSeqIdx+1:], label, updateSequences=False)
 
-		# now we march along the aligned part. For each base, we find or create
-		# a node in the graph:
-		#   - if unmatched, the corresponding node is a new node
-		#   - if matched:
-		#       - if matched to a node with the same base, the node is that node
-		#       - if matched to a node with a different base whch is in turn
-		#         aligned to a node with the same base, that aligned node is
-		#         the node
-		#       - otherwise, we create a new node.
-		# In all cases, we create edges (or add labels) threading through the
-		# nodes.
 		for sindex, matchID in zip(stringidxs, nodeidxs):
 			if sindex is None:
 				continue
@@ -370,7 +334,6 @@ class POAGraph(object):
 
 		# resort
 		self.toposort()
-		self.check_vocabulary()
 
 		self.__seqs.append(seq)
 		self.__labels.append(label)
@@ -382,6 +345,7 @@ class POAGraph(object):
 
 		del_nodes = []
 		ni = self.nodeiterator()
+		start_in = True
 		for idx, node in enumerate(ni()):
 			nodeID = str(node.ID)
 			no_out = True
@@ -394,8 +358,10 @@ class POAGraph(object):
 				if len(edge.labels) > threshold:
 					no_in = False
 					break
-			if (no_out and idx != self.nNodes - 1) or (no_in and idx != 0):
+			if (no_out and idx != self.nNodes - 1) or (no_in and not start_in):
 				del_nodes.append(nodeID)
+			else:
+				start_in = False
 
 		template = POAGraph()
 		firstID, lastID = None, None
@@ -410,7 +376,6 @@ class POAGraph(object):
 				if lastID is not None:
 					template.addEdge(lastID, tnodeID, None)
 				lastID = tnodeID
-		template.vocabulary = self.vocabulary
 		return template
 
 	def jsOutput(self):

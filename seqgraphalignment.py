@@ -69,7 +69,6 @@ class SeqGraphAlignment(object):
 		ct = Counter(condition)
 
 		vh = len(self.stringidxs)
-		u = self.graph.vocabulary
 		u_s = [base for base, c in zip(self.sequence, condition) if c == -1]
 		u_a = [base for base, c in zip(self.sequence, condition) if c == 1 or c == 3]
 		e = ct[1] + ct[2] + ct[3]
@@ -81,7 +80,7 @@ class SeqGraphAlignment(object):
 		bits += np.sum([1 + log_star(sw) for sw in sw_count]) + word_cost() * len(u_s)
 
 		### Unmatched Words
-		bits += log_star(e) + e * ceil(np.log2(vh)) + 2 * e + len(u_a) * word_cost()
+		bits += e * ceil(np.log2(vh)) + 2 * e + len(u_a) * word_cost()
 
 		return bits, clist
 

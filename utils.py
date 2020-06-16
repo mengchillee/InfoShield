@@ -1,6 +1,12 @@
 import os
 import numpy as np
 from math import ceil
+import pandas as pd
+from collections import defaultdict
+import progressbar
+
+import string
+from nltk.corpus import stopwords
 
 from docx import Document
 from docx.enum.text import WD_COLOR_INDEX
@@ -30,14 +36,33 @@ def sequence_cost(seq):
 	Output encoding cost for a given sequence
 
 	"""
-	return len(seq) * word_cost()
+	return log_star(len(seq)) + len(seq) * word_cost()
+
+def str_prep(s):
+	s = s.translate(str.maketrans('', '', string.punctuation)).split(' ')
+	s = np.array([ss.lower() for ss in s if len(ss) != 0])
+	return s
+
+def read_data(path):
+	df = pd.read_csv(path)
+	lsh_label = df['LSH label'].unique()
+	data = defaultdict(dict)
+
+	for label in progressbar.progressbar(lsh_label):
+		for id, text in df[df['LSH label'] == label][['id', 'text']].values:
+			try:
+				text = str_prep(text)
+			except:
+				continue
+			if len(text) != 0:
+				data[label][id] = text
+	return data
 
 def output_word(temp, cond, word_path):
 	"""
 	Output highlight content with office word document
 
 	"""
-
 	### Initialize document
 	doc = Document()
 	proc = doc.add_paragraph()
@@ -62,19 +87,17 @@ def output_word(temp, cond, word_path):
 
 	doc.save(word_path)
 
-def output_results(temp_arr, cond_arr, file_name, folder_name='results', html_name='graph.html', word_name='text.docx'):
+def output_results(temp_arr, cond_arr, output_path, html_name='graph.html', word_name='text.docx'):
 	"""
 	Output template results
 
 	"""
-
-	directory = os.path.join(folder_name, file_name)
-	if not os.path.exists(directory):
-		os.makedirs(directory)
+	if not os.path.exists(output_path):
+		os.makedirs(output_path)
 
 	### Iterate all templates
 	for idx, (temp, cond) in enumerate(zip(temp_arr, cond_arr)):
-		temp_path = os.path.join(directory, 'template_' + str(idx + 1))
+		temp_path = os.path.join(output_path, 'template_' + str(idx + 1))
 		if not os.path.exists(temp_path):
 			os.makedirs(temp_path)
 

@@ -1,11 +1,11 @@
 To run:
-`./autodup.py CSV_FILENAME` will run AutoDup-Coarse, followed by AutoDup-Fine.
+`./infoshield.py CSV_FILENAME` will run InfoShield-Coarse, followed by InfoShield-Fine.
 
 To specify the column headers for unique id (id_str) and text (text_str): run
-`./autodup.py CSV_FILENAME id_str text_str`
+`./infoshield.py CSV_FILENAME id_str text_str`
 
-To run AutoDup-Coarse only, run
-`./autodupcoarse.py CSV_FILENAME`
+To run InfoShield-Coarse only, run
+`./infoshieldcoarse.py CSV_FILENAME`
 
-To run AutoDup-Fine only, run
-`./autodupfine.py CSV_REUSLT_FROM_COARSE`
+To run InfoShield-Fine only, run
+`./infoshieldfine.py CSV_REUSLT_FROM_COARSE`

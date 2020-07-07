@@ -194,4 +194,4 @@ if __name__ == '__main__':
 		id_str = 'id'
 		text_str = 'text'
 
-	run_autodupfine(sys.argv[1], id_str, text_str)
+	run_infoshieldfine(sys.argv[1], id_str, text_str)

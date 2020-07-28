@@ -25,28 +25,40 @@ class SeqGraphAlignment(object):
 		self.stringidxs, self.nodeidxs = self.alignStringToGraphFast(*args, **kwargs)
 
 	def alignment_condition(self):
-		startslot = True if self.graph.startslot else False
-		condition, clist, sw_count = [], [], []
-		if startslot:
-			sw_count.append(0)
-		for i, j in zip(self.stringidxs, self.nodeidxs):
-			if startslot:
+		stringidxs, nodeidxs = self.stringidxs, self.nodeidxs
+
+		nnidx = next(i for i in self.stringidxs if i is not None)
+		if nnidx != 0:
+			for i in range(nnidx):
+				stringidxs.insert(i, i)
+				nodeidxs.insert(i, None)
+
+		nnidx = next(i for i in self.nodeidxs if i is not None)
+		if nnidx != 0:
+			for i in range(nnidx):
+				stringidxs.insert(i, None)
+				nodeidxs.insert(i, i)
+
+		startslot = -1 if self.graph.startslot else -2
+		condition, clist, sw_count = [], [], defaultdict(list)
+		# if startslot:
+		# 	sw_count.append([])
+		for i, j in zip(stringidxs, nodeidxs):
+			if startslot != -2:
 				if j == None or (i != None and self.sequence[i] != self.graph.nodedict[j].base):
 					condition.append(-1)
 					clist.append([-1, self.sequence[i]])
-					sw_count[-1] += 1
+					sw_count[startslot].append(self.sequence[i])
 					continue
 				else:
 					if (len(condition) != 0 and condition[-1] != -1) or len(condition) == 0:
 						clist.append([-1, ' '])
-					startslot = False
+					startslot = -2
 
 			if j != None and self.graph.nodedict[j].slot:
-				startslot = True
-				sw_count.append(0)
+				startslot = j
 			if i != None and j != None:
-				sb, nb = self.sequence[i], self.graph.nodedict[j].base
-				if sb == nb:
+				if self.sequence[i] == self.graph.nodedict[j].base:
 					### Matched
 					condition.append(0)
 					clist.append([0, self.sequence[i]])
@@ -62,6 +74,10 @@ class SeqGraphAlignment(object):
 				### Insertion
 				condition.append(3)
 				clist.append([3, self.sequence[i]])
+
+		# print(stringidxs)
+		# print(nodeidxs)
+
 		return condition, clist, sw_count
 
 	def alignment_encoding_cost(self):
@@ -77,7 +93,7 @@ class SeqGraphAlignment(object):
 		bits = log_star(vh) + vh
 
 		### Slot Content
-		bits += np.sum([1 + log_star(sw) for sw in sw_count]) + word_cost() * len(u_s)
+		bits += np.sum([1 + log_star(len(sw)) for sw in sw_count.values()]) + word_cost() * len(u_s)
 
 		### Unmatched Words
 		bits += e * ceil(np.log2(vh)) + 2 * e + len(u_a) * word_cost()

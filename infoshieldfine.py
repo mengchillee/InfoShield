@@ -55,13 +55,19 @@ def slot_identify(pads, gid_arr, gid, template):
 		vh_arr.append(len(cond))
 		for c in cond:
 			if startslot:
-				if c in [1, 3]:
+				if c == 1:
+					tmp, count = tmp + 1, count + 1
+					continue
+				elif c == 3:
 					tmp += 1
 					continue
-				result[-1][idx] = tmp
+				if tmp != 0:
+					result[-1][idx] = tmp
 				startslot, tmp = False, 0
 				continue
-			if c in [1, 3]:
+			if c == 1:
+				tmp, count = tmp + 1, count + 1
+			elif c == 3:
 				tmp += 1
 			else:
 				if tmp != 0:

@@ -269,12 +269,27 @@ class POAGraph(object):
 
 		return nodegenerator
 
+	def slot_count(self):
+		c = 1 if self.startslot else 0
+		ni = self.nodeiterator()
+		for node in ni():
+			if node.slot:
+				c += 1
+		return c
+
 	def seq(self):
 		selfstr = ""
 		ni = self.nodeiterator()
 		for node in ni():
 			selfstr += node.base + " "
 		return selfstr
+
+	def seq_by_arr(self):
+		selfstr = []
+		ni = self.nodeiterator()
+		for node in ni():
+			selfstr.append(node.base)
+		return np.array(selfstr)
 
 	def __str__(self):
 		selfstr = ""
@@ -343,7 +358,7 @@ class POAGraph(object):
 	def selectEdge(self, threshold):
 		"""New"""
 
-		del_nodes = []
+		del_nodes, del_idx = [], []
 		ni = self.nodeiterator()
 		start_in = True
 		for idx, node in enumerate(ni()):
@@ -360,8 +375,15 @@ class POAGraph(object):
 					break
 			if (no_out and idx != self.nNodes - 1) or (no_in and not start_in):
 				del_nodes.append(nodeID)
+				del_idx.append(idx)
 			else:
 				start_in = False
+
+		if len(del_idx) != 0 and del_idx[-1] == self.nNodes - 1:
+			for idx, di in enumerate(del_idx[::-1]):
+				if self.nNodes - 1 - di != idx:
+					del del_nodes[-idx]
+					break
 
 		template = POAGraph()
 		firstID, lastID = None, None

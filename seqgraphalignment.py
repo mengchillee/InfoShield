@@ -1,3 +1,8 @@
+####################################
+# Author: Jeremy (Meng-Chieh) Lee  #
+# Date	: 2020/06/02               #
+####################################
+
 import numpy as np
 from math import ceil
 from collections import Counter

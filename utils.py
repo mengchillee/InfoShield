@@ -66,8 +66,8 @@ def read_data(path):
 				data[label][id] = text
 
 	gvc = ceil(np.log2(len(voc)))
-	set_global_voc_cost(gvc)
-	return data
+	# set_global_voc_cost(gvc)
+	return data, gvc
 
 def output_word(temp, cond, word_path):
 	"""

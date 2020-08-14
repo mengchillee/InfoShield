@@ -11,6 +11,7 @@ from collections import defaultdict
 import time
 import pandas as pd
 import progressbar
+from joblib import Parallel, delayed
 
 import poagraph
 import seqgraphalignment
@@ -109,7 +110,6 @@ def InfoShield_MDL(pads, output_path):
 	init_cost = prev_total_cost = np.sum([sequence_cost(s) for _, s in pads.items()]) + len(pads)
 	gid_arr = np.array([l for l, _ in pads.items()])
 
-	start0 = time.time()
 	temp_arr, cond_arr, temp_dict, iter = [], [], {}, 0
 	while len(gid_arr) > 0:
 		iter += 1
@@ -160,32 +160,40 @@ def InfoShield_MDL(pads, output_path):
 		### Delete the assigned sequences
 		gid_arr = np.delete(gid_arr, gid)
 
-	end0 = time.time()
 	output_results(temp_arr, cond_arr, output_path)
-	return (init_cost - prev_total_cost) / init_cost, temp_dict, end0 - start0
+	return init_cost, prev_total_cost, temp_dict
 
+def func(k, v, gvc):
+	set_global_voc_cost(gvc)
+	output_path = os.path.join('results', str(k))
+	if not os.path.exists(output_path):
+		os.makedirs(output_path)
+	init_cost, final_cost, temp_dict = InfoShield_MDL(v, output_path)
+	return init_cost, final_cost, temp_dict
 
 def run_infoshieldfine(filename, id_str='id', text_str='text'):
-	data = read_data(filename)
+	data, gvc = read_data(filename)
 
-	col1, col2, total_time = [], [], 0
+	results = Parallel(n_jobs=16)(
+			[delayed(func)(k, v, gvc)
+			 for k, v in data.items()])
+	init_cost_arr = [r[0] for r in results]
+	final_cost_arr = [r[1] for r in results]
+	temp_dict_arr = [r[2] for r in results]
+
+	col1, col2, col3 = [], [], []
 	lab_id, tmp_id, seq_id = [], [], []
-	for k, v in progressbar.progressbar(data.items()):
-		output_path = os.path.join('results', str(k))
-		if not os.path.exists(output_path):
-			os.makedirs(output_path)
-		comp_rate, temp_dict, exec_time = InfoShield_MDL(v, output_path)
+	for k, init_cost, final_cost, temp_dict in zip(data.keys(), init_cost_arr, final_cost_arr, temp_dict_arr):
 		col1.append(k)
-		col2.append(comp_rate)
+		col2.append(init_cost)
+		col3.append(final_cost)
 		for k2, v2 in temp_dict.items():
 			for v3 in v2:
 				lab_id.append(k)
 				tmp_id.append(k2)
 				seq_id.append(v3)
-		total_time += exec_time
-	print(total_time, 'Seconds')
 
-	d = {'Cluster Label': col1, 'Compression Rate': col2}
+	d = {'Cluster Label': col1, 'Initial Cost': col2, 'Final Cost': col3}
 	df = pd.DataFrame(data=d)
 	df.to_csv('compression_rate.csv', index=False)
 

@@ -171,15 +171,26 @@ def func(k, v, gvc):
 	init_cost, final_cost, temp_dict = InfoShield_MDL(v, output_path)
 	return init_cost, final_cost, temp_dict
 
-def run_infoshieldfine(filename, id_str='id', text_str='text'):
-	data, gvc = read_data(filename)
+def run_infoshieldfine(filename, id_str='id', text_str='text', jobs=None):
+	data = read_data(filename)
 
-	results = Parallel(n_jobs=16)(
-			[delayed(func)(k, v, gvc)
-			 for k, v in data.items()])
-	init_cost_arr = [r[0] for r in results]
-	final_cost_arr = [r[1] for r in results]
-	temp_dict_arr = [r[2] for r in results]
+	if jobs == None:
+		init_cost_arr, final_cost_arr, temp_dict_arr = [], [], []
+		for k, v in data.items():
+			output_path = os.path.join('results', str(k))
+			if not os.path.exists(output_path):
+				os.makedirs(output_path)
+			init_cost, final_cost, temp_dict = InfoShield_MDL(v, output_path)
+			init_cost_arr.append(init_cost)
+			final_cost_arr.append(final_cost)
+			temp_dict_arr.append(temp_dict)
+	else:
+		results = Parallel(n_jobs=jobs)(
+				[delayed(func)(k, v, gvc)
+				 for k, v in data.items()])
+		init_cost_arr = [r[0] for r in results]
+		final_cost_arr = [r[1] for r in results]
+		temp_dict_arr = [r[2] for r in results]
 
 	col1, col2, col3 = [], [], []
 	lab_id, tmp_id, seq_id = [], [], []

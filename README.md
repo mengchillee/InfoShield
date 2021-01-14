@@ -1,3 +1,28 @@
+# InfoShield: Generalizable Information-Theoretic Human-Trafficking Detection
+
+------------
+
+Lee, M.C., Vajiac, C., Kulshrestha, A., Levy, S., Park, N., Jones, C., Rabbany, R., and Faloutsos, C., "InfoShield: Generalizable Information-Theoretic Human-Trafficking Detection". In 37th IEEE International Conference on Data Engineering (ICDE), 2021,
+
+Please cite the paper as:
+
+    @inproceedings{lee2021InfoShield,
+      title={{InfoShield:} Generalizable Information-Theoretic Human-Trafficking Detection},
+      author={Lee, Meng-Chieh and Vajiac, Catalina and Kulshrestha, Aayushi and Levy, Sacha and Park, Namyong and Jones, Cara and Rabbany, Reihaneh and Faloutsos, Christos},
+      booktitle={2021 37th IEEE International Conference on Data Engineering (ICDE)},
+      year={2021},
+      organization={IEEE},
+    }
+    
+##  Introduction
+In this paper, we present INFOSHIELD, which makes the following contributions:
+- **Practical**: being scalable and effective on real data
+- **Parameter-free and Principled**: requiring no user-defined parameters
+- **Interpretable**: finding a document to be the cluster representative, highlighting all the common phrases, and automatically detecting “slots”, i.e. phrases that differ in every document
+- **Generalizable**: beating or matching domainspecific methods in Twitter bot detection and human trafficking detection respectively, as well as being language-independent finding clusters in Spanish, Italian, and Japanese.
+
+## Usage
+
 To run:
 `./infoshield.py CSV_FILENAME` will run InfoShield-Coarse, followed by InfoShield-Fine.
 

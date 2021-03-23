@@ -34,3 +34,8 @@ To run InfoShield-Coarse only, run
 
 To run InfoShield-Fine only, run
 `./infoshieldfine.py CSV_REUSLT_FROM_COARSE`
+
+## Acknowledgement
+One part of our code is based on Partial Order Alignment, downloaded from https://github.com/ljdursi/poapy.
+This implementation is according to the following paper:
+Lee, C., Grasso, C., & Sharlow, M. F. (2002). Multiple sequence alignment using partial order graphs. Bioinformatics, 18(3), 452-464.

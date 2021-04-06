@@ -37,7 +37,5 @@ To run InfoShield-Fine only, run
 
 ## Acknowledgement
 One part of our code is based on Partial Order Alignment, downloaded from https://github.com/ljdursi/poapy.
-
 This implementation is according to the following paper:
-
 Lee, C., Grasso, C., & Sharlow, M. F. (2002). Multiple sequence alignment using partial order graphs. Bioinformatics, 18(3), 452-464.

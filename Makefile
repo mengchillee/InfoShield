@@ -1,0 +1,3 @@
+demo:
+	@echo Running sample file...
+	@python3 infoshield.py sample_data/sample_input.csv

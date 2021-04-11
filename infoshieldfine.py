@@ -77,7 +77,7 @@ def slot_identify(pads, gid_arr, gid, template):
 				tmp += 1
 			else:
 				if tmp != 0:
-					result[count-1][idx] = tmp
+					result[count][idx] = tmp
 				count, tmp = count + 1, 0
 		if tmp != 0:
 			result[count][idx] = tmp

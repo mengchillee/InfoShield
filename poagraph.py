@@ -197,7 +197,7 @@ class POAGraph(object):
 		node_to_pn = {}
 		pn_to_nodes = {}
 
-		# Find the mappings from nodes to pseudonodes
+		### Find the mappings from nodes to pseudonodes
 		cur_pnid = 0
 		for _, node in self.nodedict.items():
 			if node.ID not in node_to_pn:
@@ -207,7 +207,7 @@ class POAGraph(object):
 					node_to_pn[nid] = cur_pnid
 				cur_pnid += 1
 
-		# create the pseudonodes
+		### Create the pseudonodes
 		Pseudonode = collections.namedtuple("Pseudonode", ["pnode_id", "predecessors", "successors", "node_ids"])
 		pseudonodes = []
 
@@ -378,17 +378,12 @@ class POAGraph(object):
 				if len(edge.labels) > threshold:
 					no_in = False
 					break
-			if (no_out and idx != self.nNodes - 1) or (no_in and not start_in):
-				del_nodes.append(nodeID)
-				del_idx.append(idx)
+			if no_out and no_in:
+				if idx != self.nNodes - 1 and not start_in:
+					del_nodes.append(nodeID)
+					del_idx.append(idx)
 			else:
 				start_in = False
-
-		if len(del_idx) != 0 and del_idx[-1] == self.nNodes - 1:
-			for idx, di in enumerate(del_idx[::-1]):
-				if self.nNodes - 1 - di != idx:
-					del del_nodes[-idx]
-					break
 
 		template = POAGraph()
 		firstID, lastID = None, None

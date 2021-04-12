@@ -24,7 +24,7 @@ WCI = {-1: WD_COLOR_INDEX.RED,
 
 def set_global_voc_cost(c):
 	global GOLBAL_VOC_COST
-	GOLBAL_VOC_COST = c
+	GOLBAL_VOC_COST = max(c, 8)
 
 def log_star(x):
 	"""
@@ -103,7 +103,7 @@ def output_results(temp_arr, cond_arr, output_path, html_name='graph.html', word
 	Output template results
 
 	"""
-	if not os.path.exists(output_path):
+	if len(temp_arr) > 0 and not os.path.exists(output_path):
 		os.makedirs(output_path)
 
 	### Iterate all templates

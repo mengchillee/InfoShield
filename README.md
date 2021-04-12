@@ -23,17 +23,20 @@ In this paper, we present INFOSHIELD, which makes the following contributions:
 
 ## Usage
 
-To run:
-`./infoshield.py CSV_FILENAME` will run InfoShield-Coarse, followed by InfoShield-Fine.
+To run InfoShield, running InfoShield-Coarse, followed by InfoShield-Fine:
+`python infoshield.py CSV_FILENAME`
 
-To specify the column headers for unique id (id_str) and text (text_str): run
-`./infoshield.py CSV_FILENAME id_str text_str`
+To specify the column headers for unique id (id_str) and text (text_str):
+`python infoshield.py CSV_FILENAME id_str text_str`
 
-To run InfoShield-Coarse only, run
-`./infoshieldcoarse.py CSV_FILENAME`
+To run the example:
+`python infoshield.py data/sample_input.csv id text`
 
-To run InfoShield-Fine only, run
-`./infoshieldfine.py CSV_REUSLT_FROM_COARSE`
+To run InfoShield-Coarse only:
+`python infoshieldcoarse.py CSV_FILENAME`
+
+To run InfoShield-Fine only:
+`python infoshieldfine.py CSV_REUSLT_FROM_COARSE`
 
 ## Acknowledgement
 One part of our code is based on Partial Order Alignment, downloaded from https://github.com/ljdursi/poapy.

@@ -46,8 +46,7 @@ class SeqGraphAlignment(object):
 
 		startslot = -1 if self.graph.startslot else -2
 		condition, clist, sw_count = [], [], defaultdict(list)
-		# if startslot:
-		# 	sw_count.append([])
+
 		for i, j in zip(stringidxs, nodeidxs):
 			if startslot != -2:
 				if j == None or (i != None and self.sequence[i] != self.graph.nodedict[j].base):
@@ -79,9 +78,6 @@ class SeqGraphAlignment(object):
 				### Insertion
 				condition.append(3)
 				clist.append([3, self.sequence[i]])
-
-		# print(stringidxs)
-		# print(nodeidxs)
 
 		return condition, clist, sw_count
 

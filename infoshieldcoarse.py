@@ -122,6 +122,7 @@ class InfoShieldCoarse():
         else:
             text = ''
 
+
         text += ' ' + row[self.description] if type(row[self.description]) == str else ''
         phrases = self.tokenize_text(text)
 
@@ -234,5 +235,5 @@ if __name__ == '__main__':
         usage(1)
 
     filename = sys.argv[1]
-    d = InfoShieldCoarse(filename, num_phrases=5)
+    d = InfoShieldCoarse(filename, num_phrases=10)
     d.clustering()

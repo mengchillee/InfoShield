@@ -23,8 +23,8 @@ In this paper, we present INFOSHIELD, which makes the following contributions:
 
 ## Usage
 
-To run:
-`python infoshield.py CSV_FILENAME` will run InfoShield-Coarse, followed by InfoShield-Fine.
+To run InfoShield, running InfoShield-Coarse, followed by InfoShield-Fine:
+`python infoshield.py CSV_FILENAME`
 
 To specify the column headers for unique id (id_str) and text (text_str):
 `python infoshield.py CSV_FILENAME id_str text_str`

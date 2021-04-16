@@ -1,0 +1,51 @@
+  <!doctype html>
+  <html>
+  <head>
+	<title>POA Graph Alignment</title>
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/3.11.0/vis.min.js"></script>
+  </head>
+
+  <body>
+
+  <div id="mynetwork"></div>
+
+  <script type="text/javascript">
+	// create a network
+var nodes = [
+    {id:0, label: "i"},
+    {id:1, label: "made"},
+    {id:2, label: "30k"},
+    {id:3, label: "working", color: "red"
+    {id:4, label: "call"},
+    {id:5, label: "1234567890"},
+    {id:6, label: "or"},
+    {id:7, label: "visit"},
+    {id:8, label: "scamcom"}
+];
+ 
+var edges = [
+    {from: 0, to: 1, value: 1},
+    {from: 1, to: 2, value: 1},
+    {from: 2, to: 3, value: 1},
+    {from: 3, to: 4, value: 1},
+    {from: 4, to: 5, value: 1},
+    {from: 5, to: 6, value: 1},
+    {from: 6, to: 7, value: 1},
+    {from: 7, to: 8, value: 1}
+];
+
+  var container = document.getElementById('mynetwork');
+  var data= {
+	nodes: nodes,
+	edges: edges,
+  };
+  var options = {
+	width: '100%',
+	height: '800px'
+  };
+  var network = new vis.Network(container, data, options);
+</script>
+
+</body>
+</html>

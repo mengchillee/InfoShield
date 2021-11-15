@@ -1,6 +1,6 @@
 ####################################
 # Author: Jeremy (Meng-Chieh) Lee  #
-# Date	: 2020/06/02               #
+# Email	: mengchil@cs.cmu.edu      #
 ####################################
 
 import os

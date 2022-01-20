@@ -48,14 +48,14 @@ def str_prep(s):
 	s = np.array([ss.lower() for ss in s if len(ss) != 0])
 	return s
 
-def read_data(path):
+def read_data(path, id_str, text_str):
 	df = pd.read_csv(path)
 	lsh_label = df['LSH label'].unique()
 	data = defaultdict(dict)
 
 	voc = set()
 	for label in progressbar.progressbar(lsh_label):
-		for id, text in df[df['LSH label'] == label][['id', 'text']].values:
+		for id, text in df[df['LSH label'] == label][[id_str, text_str]].values:
 			try:
 				text = str_prep(text)
 				for t in text:

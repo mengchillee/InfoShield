@@ -172,7 +172,7 @@ def func(k, v, gvc):
 	return init_cost, final_cost, temp_dict
 
 def run_infoshieldfine(filename, id_str='id', text_str='text', jobs=None):
-	data = read_data(filename)
+	data = read_data(filename, id_str, text_str)
 
 	if jobs == None:
 		init_cost_arr, final_cost_arr, temp_dict_arr = [], [], []

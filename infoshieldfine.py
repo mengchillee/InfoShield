@@ -166,8 +166,6 @@ def InfoShield_MDL(pads, output_path):
 def func(k, v, gvc):
 	set_global_voc_cost(gvc)
 	output_path = os.path.join('results', str(k))
-	if not os.path.exists(output_path):
-		os.makedirs(output_path)
 	init_cost, final_cost, temp_dict = InfoShield_MDL(v, output_path)
 	return init_cost, final_cost, temp_dict
 

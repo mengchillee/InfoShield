@@ -45,7 +45,7 @@ def filter_text(text):
 
 
 class InfoShieldCoarse():
-    def __init__(self, filename: str, doc_text_header='', doc_id_header='', num_phrases=10):
+    def __init__(self, filename: str, doc_id_header='', doc_text_header='', num_phrases=10):
         # init basic variables
         self.time = time.time()
         self.num_phrases = num_phrases
@@ -73,8 +73,8 @@ class InfoShieldCoarse():
         self.term_freq = defaultdict(lambda: Counter())
         self.length = Counter()
         self.data[self.description] = self.data[self.description].apply(filter_text)
-        self.tfidfs = tfidf.fit_transform(self.data[self.description])
-        self.tfidf_indices = tfidf.get_feature_names()
+        self.tfidfs = tfidf.fit_transform(self.data[self.description].values)
+        self.tfidf_indices = tfidf.get_feature_names_out()
         self.num_ads_features = 0
 
 

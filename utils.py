@@ -8,7 +8,6 @@ import numpy as np
 from math import ceil
 import pandas as pd
 from collections import defaultdict
-import progressbar
 
 import string
 from nltk.corpus import stopwords
@@ -54,7 +53,7 @@ def read_data(path, id_str, text_str):
 	data = defaultdict(dict)
 
 	voc = set()
-	for label in progressbar.progressbar(lsh_label):
+	for label in lsh_label:
 		for id, text in df[df['LSH label'] == label][[id_str, text_str]].values:
 			try:
 				text = str_prep(text)

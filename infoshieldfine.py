@@ -160,7 +160,10 @@ def InfoShield_MDL(pads, output_path):
 		### Delete the assigned sequences
 		gid_arr = np.delete(gid_arr, gid)
 
-	output_results(temp_arr, cond_arr, output_path)
+	if len(temp_dict) > 0:
+		if not os.path.exists(output_path):
+			os.makedirs(output_path)
+		output_results(temp_arr, cond_arr, output_path)
 	return init_cost, prev_total_cost, temp_dict
 
 def func(k, v, gvc):
@@ -169,8 +172,8 @@ def func(k, v, gvc):
 	init_cost, final_cost, temp_dict = InfoShield_MDL(v, output_path)
 	return init_cost, final_cost, temp_dict
 
-def run_infoshieldfine(filename, id_str='id', text_str='text', jobs=None):
-	data = read_data(filename, id_str, text_str)
+def run_infoshieldfine(filename, id_str='id', text_str='text', jobs=-2):
+	data, gvc = read_data(filename, id_str, text_str)
 
 	if jobs == None:
 		init_cost_arr, final_cost_arr, temp_dict_arr = [], [], []

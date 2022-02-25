@@ -179,8 +179,6 @@ def run_infoshieldfine(filename, id_str='id', text_str='text', jobs=-2):
 		init_cost_arr, final_cost_arr, temp_dict_arr = [], [], []
 		for k, v in data.items():
 			output_path = os.path.join('results', str(k))
-			if not os.path.exists(output_path):
-				os.makedirs(output_path)
 			init_cost, final_cost, temp_dict = InfoShield_MDL(v, output_path)
 			init_cost_arr.append(init_cost)
 			final_cost_arr.append(final_cost)

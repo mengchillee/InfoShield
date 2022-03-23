@@ -24,7 +24,7 @@ In this paper, we present INFOSHIELD, which makes the following contributions:
 ## Usage
 
 To run the InfoShield demo:
-`python infoshield.py CSV_FILENAME`
+`make demo`
 
 To specify the column headers for unique id (id_str) and text (text_str):
 `python infoshield.py CSV_FILENAME id_str text_str`

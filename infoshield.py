@@ -21,4 +21,4 @@ if __name__ == '__main__':
 	coarse = InfoShieldCoarse(*sys.argv[1:])
 	coarse.clustering()
 	print(coarse.final_data_filename)
-	run_infoshieldfine(coarse.final_data_filename)
+	run_infoshieldfine(coarse.final_data_filename, *sys.argv[2:])

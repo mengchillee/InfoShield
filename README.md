@@ -4,6 +4,8 @@
 
 Lee, M.C., Vajiac, C., Kulshrestha, A., Levy, S., Park, N., Jones, C., Rabbany, R., and Faloutsos, C., "InfoShield: Generalizable Information-Theoretic Human-Trafficking Detection". *37th IEEE International Conference on Data Engineering (ICDE)*, 2021.
 
+https://ieeexplore.ieee.org/abstract/document/9458868
+
 Please cite the paper as:
 
     @inproceedings{lee2021InfoShield,
